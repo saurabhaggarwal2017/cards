@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: cards
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/easy-microservice-cards
+    password: root
+    username: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 9000

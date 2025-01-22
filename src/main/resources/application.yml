@@ -1,6 +1,10 @@
+server:
+  port: 9000
+
 spring:
   application:
     name: cards
+
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/easy-microservice-cards
     password: root
@@ -11,5 +15,21 @@ spring:
       ddl-auto: update
     show-sql: true
 
-server:
-  port: 9000
+  profiles:
+    active: "default"
+
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+

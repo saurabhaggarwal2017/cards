@@ -11,13 +11,11 @@ spring:
     username: root
 
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
-    show-sql: true
-
   profiles:
     active: "default"
-
   config:
     import: "optional:configserver:http://localhost:8071/"
 
@@ -38,6 +36,7 @@ management:
   info:
     env:
       enabled: true
+
 eureka:
   instance:
     prefer-ip-address: true

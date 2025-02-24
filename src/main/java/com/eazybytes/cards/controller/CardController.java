@@ -12,6 +12,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -35,6 +37,7 @@ import java.util.List;
 public class CardController {
     private final ICardService cardService;
     private Environment environment;
+    private final Logger logger = LoggerFactory.getLogger(CardController.class);
     @Autowired
     private CardsContactInfoDto cardsContactInfoDto;
     @Value("${build.version}")
@@ -114,8 +117,10 @@ public class CardController {
     )
     @GetMapping("/all")
     public ResponseEntity<List<CardDto>> getAllCardsDetails(
+            @RequestHeader("eazybank-correlation-id") String correlationId,
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits.")
             @RequestParam("mobileNumber") String mobileNumber) {
+        logger.debug("eazyBank-correlation-id found: {} ", correlationId);
         List<CardDto> allCards = cardService.getAllCardDetails(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(allCards);
     }

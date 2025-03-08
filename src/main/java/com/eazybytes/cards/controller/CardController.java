@@ -42,6 +42,7 @@ public class CardController {
     private CardsContactInfoDto cardsContactInfoDto;
     @Value("${build.version}")
     private String version;
+
     public CardController(ICardService cardService) {
         this.cardService = cardService;
     }
@@ -119,8 +120,10 @@ public class CardController {
     public ResponseEntity<List<CardDto>> getAllCardsDetails(
             @RequestHeader("eazybank-correlation-id") String correlationId,
             @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits.")
-            @RequestParam("mobileNumber") String mobileNumber) {
+            @RequestParam("mobileNumber") String mobileNumber) throws InterruptedException {
         logger.debug("eazyBank-correlation-id found: {} ", correlationId);
+//        Thread.sleep(1000);
+//        throw new RuntimeException();
         List<CardDto> allCards = cardService.getAllCardDetails(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(allCards);
     }
@@ -256,6 +259,7 @@ public class CardController {
         cardService.deleteCard(mobileNumber, cardNumber);
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto(HttpStatus.OK.toString(), "Card deleted Successfully!"));
     }
+
     @GetMapping("/build-info")
     public ResponseEntity<String> getBuildInfo() {
         return ResponseEntity.status(HttpStatus.OK).body(version);
